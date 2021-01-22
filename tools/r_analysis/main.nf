@@ -17,7 +17,7 @@ process r_analysis {
         path 'input/*'
 
     output:
-        file "*"
+        file '*'
 
     script:
 
