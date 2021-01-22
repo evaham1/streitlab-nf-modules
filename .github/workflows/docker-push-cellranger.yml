@@ -1,9 +1,9 @@
-name: docker-build-push
-#https://github.com/marketplace/actions/build-and-push-docker-images
+name: docker-push-cellranger
 
 on:
   push:
     branches: [master]
+    paths: modules/cellranger/Dockerfile
 
 jobs:
   build-push-docker:
@@ -12,7 +12,7 @@ jobs:
       matrix:
         tag: ["base"]
         docker-file: ["Dockerfile"]
-        module-name: ["r_analysis"]
+        module-name: ["cellranger"]
     steps:
       - uses: actions/checkout@v2
       - name: Set version and tags
