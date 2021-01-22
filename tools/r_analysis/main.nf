@@ -14,10 +14,10 @@ process r_analysis {
 
     input:
         val opts
-        path input
+        path 'input/*'
 
     output:
-        path("output")
+        file "*"
 
     script:
 
@@ -29,5 +29,6 @@ process r_analysis {
 
     """
     Rscript ${opts.script} --cores ${task.cpus} --runtype nextflow ${args}
+    rm -r input
     """
 }
