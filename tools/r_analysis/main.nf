@@ -10,7 +10,7 @@ process r_analysis {
                     if (opts.publish_results == "none") null
                     else filename }
 
-    container "alexthiery/otic-reprogramming-r_analysis:latest"
+    container "rocker/tidyverse:3.6.3"
 
     input:
         val opts

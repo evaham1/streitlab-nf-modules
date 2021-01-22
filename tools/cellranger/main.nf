@@ -12,7 +12,7 @@ process cellranger_count {
                     if (opts.publish_results == "none") null
                     else filename }
 
-    container "alexthiery/10x-modules-cellranger:latest"
+    container "streitlab/custom-nf-modules-cellranger:latest"
 
     input:
         val opts
