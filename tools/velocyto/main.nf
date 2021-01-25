@@ -18,7 +18,7 @@ process velocyto_run_10x {
         path gtf
 
     output:
-        tuple val(meta), path("cellrangerOut_${meta.sample_name}/velocyto/cellrangerOut_${meta.sample_name}.loom"), emit: velocytoCounts
+        tuple val(meta), path("cellrangerOut_${meta.sample_name}/velocyto/cellrangerOut_${meta.sample_name}.loom"), emit: velocyto_counts
 
     script:
         args = ""
@@ -52,7 +52,7 @@ process velocyto_samtools {
         tuple val(meta), path(reads)
 
     output:
-        tuple val(meta), path(reads), emit: sortedCellrangerOut
+        tuple val(meta), path(reads), emit: sorted_cellranger_out
 
     script:
         velocyto_samtools_command = "samtools sort -t CB -O BAM -o cellsorted_possorted_genome_bam.bam possorted_genome_bam.bam"

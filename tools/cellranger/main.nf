@@ -20,8 +20,8 @@ process cellranger_count {
         path reference_genome
 
     output:
-        tuple val(meta), path("${meta.sample_name}_filtered_feature_bc_matrix"), emit: readCounts
-        tuple val(meta), path("cellrangerOut_${meta.sample_name}"), emit: cellrangerOut
+        tuple val(meta), path("${meta.sample_name}_filtered_feature_bc_matrix"), emit: read_counts
+        tuple val(meta), path("cellrangerOut_${meta.sample_name}"), emit: cellranger_out
 
     script:
         args = ""

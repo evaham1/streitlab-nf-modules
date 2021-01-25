@@ -10,13 +10,12 @@ Channel
     .set {ch_gtf}
 
 Channel
-    .from(params.genome)
-    .set {ch_genome}
+    .from(params.fasta)
+    .set {ch_fasta}
     
 workflow {
     tenx_fastq_metadata("$baseDir/../../../test_data/cellranger/sample_info.csv")
     cellranger_filter_gtf(params.modules['cellranger_filter_gtf'], ch_gtf)
-    cellranger_mkref(params.modules['cellranger_mkref'], cellranger_filter_gtf.out, ch_genome)
+    cellranger_mkref(params.modules['cellranger_mkref'], cellranger_filter_gtf.out, ch_fasta)
     cellranger_count(params.modules['cellranger_count'], tenx_fastq_metadata.out, cellranger_mkref.out.collect() )
 }
-
