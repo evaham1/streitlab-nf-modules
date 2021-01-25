@@ -3,7 +3,7 @@ name: docker-push-cellranger
 on:
   push:
     branches: [master]
-    paths: modules/cellranger/Dockerfile
+    paths: tools/cellranger/Dockerfile
 
 jobs:
   build-push-docker:

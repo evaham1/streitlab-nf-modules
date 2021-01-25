@@ -11,7 +11,7 @@ RUN  apt-get update \
 
 # Install cellranger
 RUN cd /opt/ && \
-	wget -O cellranger-4.0.0.tar.gz "https://cf.10xgenomics.com/releases/cell-exp/cellranger-4.0.0.tar.gz?Expires=1611379168&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci00LjAuMC50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2MTEzNzkxNjh9fX1dfQ__&Signature=Lp7RnnKiSWlNz~R4R9aMK7Od3PUNjfg8dRmcG0xdp4ZA4vrx8m8IVUcLP3zylXMnbys6QvcBJq2EiG2Cz0BNGmMNm-G27cN8s6y06Ao2j0oCKc8OxCVCqmZ220MnHKlSiy1sOaAVbTKa92yV38kPrBdinFWHOtw41YOpkOU3BEwExvQ~OCatjZRdwfOqXqSe0JO-MUlOKOS8MyLeUrR~2NhD6yF8S7hnwPN3~2r5w90lPwG1mei4X0~bGrXahFgzfRl1Sg0sLTytNE2D-QS5mXyGLd~4gybXmTPCSuzzuBNuyQ6l-SAA444EdeAXf~sfJXyTDCRRglFtrs5ZF4EbZg__&Key-Pair-Id=APKAI7S6A5RYOXBWRPDA" && \	
+	wget -O cellranger-4.0.0.tar.gz "https://cf.10xgenomics.com/releases/cell-exp/cellranger-4.0.0.tar.gz?Expires=1611627277&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci00LjAuMC50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2MTE2MjcyNzd9fX1dfQ__&Signature=DsG0QMLyLJ9fxy-TVch-i3DdWvJkzkRRjudZO9v5GZ4ZCGjviX95CT81UbPIsqg42D5gHw2eGbEpEk7r6q~wJqgdY4B2rHBCmfAVahgp5eYnKNwc-wH6GyvfI6YGD7HAWsR0LBWL5NLH5zkGHT8KYgLNh~40LwAJilVq5VMUd2ypHzGkWzQq4CHjNft0HIKilF6c9~11C8LMylBvAIHReZZ8KRyIzurg-S2UWickNRMTwdwksgtonUBGLNed4BpyfbYjcxeuePAaJWemktqBN0buBA4wi2R8H14FL2EUQGV9rnFXl8bSFSU5Ygj7aVlGso4bIxgGiqmVsCBt8EPFrA__&Key-Pair-Id=APKAI7S6A5RYOXBWRPDA" && \	
 	tar -xzvf cellranger-4.0.0.tar.gz && \
 	rm -f cellranger-4.0.0.tar.gz
 
