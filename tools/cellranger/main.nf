@@ -56,7 +56,7 @@ process cellranger_filter_gtf {
                     else filename }
 
 
-    container "alexthiery/10x-modules-cellranger:latest"
+    container "streitlab/custom-nf-modules-cellranger:latest"
 
     input:
         val(opts)
@@ -97,7 +97,7 @@ process cellranger_mkref {
                     else filename }
 
 
-    container "alexthiery/10x-modules-cellranger:latest"
+    container "streitlab/custom-nf-modules-cellranger:latest"
 
     input:
         val(opts)
