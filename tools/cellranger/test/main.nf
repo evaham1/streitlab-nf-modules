@@ -14,7 +14,7 @@ Channel
     .set {ch_fasta}
     
 workflow {
-    tenx_fastq_metadata("$baseDir/../../../test_data/cellranger/sample_info.csv")
+    tenx_fastq_metadata(params.samplesheet)
     cellranger_filter_gtf(params.modules['cellranger_filter_gtf'], ch_gtf)
     cellranger_mkref(params.modules['cellranger_mkref'], cellranger_filter_gtf.out, ch_fasta)
     cellranger_count(params.modules['cellranger_count'], tenx_fastq_metadata.out, cellranger_mkref.out.collect() )

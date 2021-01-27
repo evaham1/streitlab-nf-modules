@@ -2,6 +2,43 @@
 
 nextflow.enable.dsl=2
 
+
+process velocyto_run{
+    publishDir "${params.outdir}/${opts.publish_dir}",
+        mode: "copy", 
+        overwrite: true,
+        saveAs: { filename ->
+                      if (opts.publish_results == "none") null
+                      else filename }
+    
+    container "quay.io/biocontainers/velocyto.py:0.17.17--py37h97743b1_2"
+
+    input:
+        val opts
+        tuple val(meta), path(bam), path(barcodes)
+        path gtf
+
+    output:
+        // tuple val(meta), path("cellrangerOut_${meta.sample_name}/velocyto/cellrangerOut_${meta.sample_name}.loom"), emit: velocyto_counts
+
+    script:
+        args = ""
+        if(opts.args && opts.args != '') {
+            ext_args = opts.args
+            args += ext_args.trim()
+        }
+
+        velocyto_command = "velocyto run ${args} -b ${barcodes} -e ${meta.sample_name} -o velocyto_${meta.sample_name} ${bam} ${gtf}"
+        if (params.verbose){
+            println ("[MODULE] velocyto/run command: " + velocyto_command)
+        }
+
+        """
+        ${velocyto_command}
+        """
+}
+
+
 process velocyto_run_10x {
     publishDir "${params.outdir}/${opts.publish_dir}",
         mode: "copy", 

@@ -3,8 +3,8 @@
 // Specify DSL2
 nextflow.enable.dsl=2
 
-include {tenx_fastq_metadata} from "$baseDir/../../luslab-nf-modules/tools/metadata/main.nf"
-include {cellranger_filter_gtf; cellranger_mkref; cellranger_count} from "$baseDir/../../main.nf"
+include {tenx_fastq_metadata} from "../../luslab-nf-modules/tools/metadata/main.nf"
+include {cellranger_filter_gtf; cellranger_mkref; cellranger_count} from "../../tools/cellranger/main.nf"
 
 // Define workflow to subset and index a genome region fasta file
 workflow cellranger_alignment {

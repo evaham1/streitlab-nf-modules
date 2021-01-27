@@ -2,18 +2,25 @@
 
 nextflow.enable.dsl=2
 
-include {velocyto_run_10x; velocyto_samtools} from "$baseDir/../main.nf"
+include {cellranger_alignment} from "$baseDir/../../../workflows/cellranger_flows/main.nf"
+include {velocyto_samtools; velocyto_run_10x} from "$baseDir/../main.nf"
+
 
 Channel
-    .fromPath("$baseDir/../../../test_data/velocyto/cellrangerOut_hh*", type: 'dir' )
-    .view()
-    .set {ch_cellranger_out}
-    
-// Channel
-//     .from(params.gtf)
-//     .set {ch_gtf}
+    .from(params.gtf)
+    .set {ch_gtf}
 
-// workflow {
-//     velocyto_samtools(params.modules['velocyto_samtools'], ch_cellranger_out)
-//     velocyto_run_10x(params.modules['velocyto_run_10x'], velocyto_samtools.out.sorted_cellranger_out, ch_gtf)
-// }
+Channel
+    .from(params.fasta)
+    .set {ch_fasta}
+
+
+workflow {
+
+    cellranger_alignment(ch_fasta, ch_gtf, "$baseDir/../../../test_data/cellranger/sample_info.csv")
+
+    // velocyto_run(params.modules['velocyto_run'], ch_velocyto, ch_gtf)
+    velocyto_samtools(params.modules['velocyto_samtools'], cellranger_alignment.out.cellranger_out)
+
+    velocyto_run_10x(params.modules['velocyto_run_10x'], velocyto_samtools.out, ch_gtf)
+}
