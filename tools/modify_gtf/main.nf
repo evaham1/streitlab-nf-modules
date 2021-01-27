@@ -10,7 +10,7 @@ process modify_gtf {
                     if (opts.publish_results == "none") null
                     else filename }
 
-    container "alexthiery/10x-modules-modify_gtf:latest"
+    container "quay.io/biocontainers/bioframe:0.0.12--pyh3252c3a_0"
 
     input:
         val opts
@@ -20,7 +20,7 @@ process modify_gtf {
         path "${opts.filename}.gtf", emit: GTF
 
     """
-    #!/opt/conda/bin/python
+    #!/usr/local/bin/python
     
     import pandas as pd
     import re
