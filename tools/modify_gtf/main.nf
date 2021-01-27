@@ -17,7 +17,7 @@ process modify_gtf {
         path gtf
 
     output:
-        path "${opts.filename}.gtf", emit: GTF
+        path "${opts.filename}.gtf", emit: gtf
 
     """
     #!/usr/local/bin/python
