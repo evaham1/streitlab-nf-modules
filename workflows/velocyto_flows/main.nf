@@ -3,7 +3,7 @@
 // Specify DSL2
 nextflow.enable.dsl=2
 
-include {tenx_fastq_metadata} from "../../tools/metadata/main.nf"
+include {tenx_fastq_metadata} from "../../luslab-nf-modules/tools/metadata/main.nf"
 include {velocyto_samtools; velocyto_run_10x} from "../../tools/velocyto/main.nf"
 
 // Define workflow to subset and index a genome region fasta file
