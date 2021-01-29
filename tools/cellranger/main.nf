@@ -7,14 +7,13 @@ include { initOptions; saveFiles; getSoftwareName } from './functions'
 params.options = [:]
 def options    = initOptions(params.options)
 
-println(options.args)
 
 process cellranger_count {
 
     label 'process_high'
     publishDir "${params.outdir}",
         mode: 'copy',
-        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process)) }
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
 
     container "streitlab/custom-nf-modules-cellranger:latest"
 
@@ -48,7 +47,7 @@ process cellranger_mkgtf {
     label 'process_med'
     publishDir "${params.outdir}",
         mode: 'copy',
-        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process)) }
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
 
     container "streitlab/custom-nf-modules-cellranger:latest"
 
@@ -78,7 +77,7 @@ process cellranger_mkref {
     label 'process_high'
     publishDir "${params.outdir}",
         mode: 'copy',
-        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process)) }
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
 
     container "streitlab/custom-nf-modules-cellranger:latest"
 

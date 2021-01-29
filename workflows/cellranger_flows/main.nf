@@ -3,8 +3,14 @@
 // Specify DSL2
 nextflow.enable.dsl=2
 
-include {tenx_fastq_metadata} from "../../luslab-nf-modules/tools/metadata/main.nf"
-include {cellranger_filter_gtf; cellranger_mkref; cellranger_count} from "../../tools/cellranger/main.nf"
+params.cellranger_mkgtf    = [:]
+params.cellranger_mkref     = [:]
+params.cellranger_count    = [:]
+
+include {tenx_fastq_metadata} from "../../luslab-nf-modules/tools/metadata/main.nf" 
+include {cellranger_mkgtf} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_mkgtf)
+include {cellranger_mkref} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_mkref)
+include {cellranger_count} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_count)
 
 // Define workflow to subset and index a genome region fasta file
 workflow scRNAseq_alignment_cellranger {
@@ -19,14 +25,13 @@ workflow scRNAseq_alignment_cellranger {
         tenx_fastq_metadata(sample_csv)
 
         // Filter GTF based on gene biotypes passed in params.modules
-        cellranger_filter_gtf(params.modules['cellranger_filter_gtf'], gtf)
+        cellranger_mkgtf( gtf )
 
         // Make reference genome
-        cellranger_mkref(params.modules['cellranger_mkref'], cellranger_filter_gtf.out, fasta)
+        cellranger_mkref( cellranger_mkgtf.out, fasta )
 
         // Obtain read counts
-        cellranger_count(params.modules['cellranger_count'], tenx_fastq_metadata.out, cellranger_mkref.out.collect() )
-
+        cellranger_count( tenx_fastq_metadata.out, cellranger_mkref.out.collect() )
 
     emit:
         read_counts = cellranger_count.out.read_counts

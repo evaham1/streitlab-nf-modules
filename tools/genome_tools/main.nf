@@ -11,7 +11,7 @@ process gtf_tag_chroms {
     label 'process_low'
     publishDir "${params.outdir}",
         mode: 'copy',
-        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process)) }
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
 
     container "quay.io/biocontainers/bioframe:0.0.12--pyh3252c3a_0"
 
