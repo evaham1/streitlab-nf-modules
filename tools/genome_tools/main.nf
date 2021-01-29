@@ -1,23 +1,28 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
-process modify_gtf {
+include { initOptions; saveFiles; getSoftwareName } from './functions'
 
-    publishDir "${params.outdir}/${opts.publish_dir}",
-    mode: "copy",
-    overwrite: true,
-    saveAs: { filename ->
-                    if (opts.publish_results == "none") null
-                    else filename }
+params.options = [:]
+def options    = initOptions(params.options)
+
+process gtf_tag_chroms {
+    
+    label 'process_low'
+    publishDir "${params.outdir}",
+        mode: 'copy',
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process)) }
 
     container "quay.io/biocontainers/bioframe:0.0.12--pyh3252c3a_0"
 
     input:
-        val opts
         path gtf
 
     output:
-        path "${opts.filename}.gtf", emit: gtf
+        path "${prefix}.gtf", emit: gtf
+
+    script:
+        prefix = options.suffix ? "${options.suffix}" : "tag_chroms"
 
     """
     #!/usr/local/bin/python
@@ -25,11 +30,11 @@ process modify_gtf {
     import pandas as pd
     import re
   
-    # make list of chromosomes to edit
-    lab = [${opts.edit_chroms}]
+    # make array of chromosomes to tag
+    lab = [${options.args}]
 
     # create output file to write to
-    outfile = open("./modified.gtf", 'a')
+    outfile = open("${prefix}.gtf", 'a')
 
     with open("${gtf}", 'rt') as gtf:
         for line in gtf:

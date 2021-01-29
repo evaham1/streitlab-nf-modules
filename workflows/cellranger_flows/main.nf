@@ -7,7 +7,7 @@ include {tenx_fastq_metadata} from "../../luslab-nf-modules/tools/metadata/main.
 include {cellranger_filter_gtf; cellranger_mkref; cellranger_count} from "../../tools/cellranger/main.nf"
 
 // Define workflow to subset and index a genome region fasta file
-workflow cellranger_alignment {
+workflow scRNAseq_alignment_cellranger {
     take:
         fasta
         gtf
