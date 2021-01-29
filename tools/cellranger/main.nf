@@ -2,20 +2,23 @@
 
 nextflow.enable.dsl=2
 
+include { initOptions; saveFiles; getSoftwareName } from './functions'
+
+params.options = [:]
+def options    = initOptions(params.options)
+
+println(options.args)
 
 process cellranger_count {
 
-    publishDir "${params.outdir}/${opts.publish_dir}",
-    mode: "copy",
-    overwrite: true,
-    saveAs: { filename ->
-                    if (opts.publish_results == "none") null
-                    else filename }
+    label 'process_high'
+    publishDir "${params.outdir}",
+        mode: 'copy',
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process)) }
 
     container "streitlab/custom-nf-modules-cellranger:latest"
 
     input:
-        val opts
         tuple val(meta), path(reads)
         path reference_genome
 
@@ -24,13 +27,7 @@ process cellranger_count {
         tuple val(meta), path("cellrangerOut_${meta.sample_name}"), emit: cellranger_out
 
     script:
-        args = ""
-            if(opts.args && opts.args != '') {
-                ext_args = opts.args
-                args += ext_args.trim()
-            }
-
-        cellranger_count_command = "cellranger count --id='cellrangerOut_${meta.sample_name}' --fastqs='./' --sample=${meta.sample_id} --transcriptome=${reference_genome} ${args}"
+        cellranger_count_command = "cellranger count --id='cellrangerOut_${meta.sample_name}' --fastqs='./' --sample=${meta.sample_id} --transcriptome=${reference_genome} ${options.args}"
         
         // Log
         if (params.verbose){
@@ -46,61 +43,46 @@ process cellranger_count {
 }
 
 
-process cellranger_filter_gtf {
+process cellranger_mkgtf {
 
-    publishDir "${params.outdir}/${opts.publish_dir}",
-    mode: "copy",
-    overwrite: true,
-    saveAs: { filename ->
-                    if (opts.publish_results == "none") null
-                    else filename }
-
+    label 'process_med'
+    publishDir "${params.outdir}",
+        mode: 'copy',
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process)) }
 
     container "streitlab/custom-nf-modules-cellranger:latest"
 
     input:
-        val(opts)
         path(gtf)
 
     output:
-        path("${opts.outfile}")
+        path("${task.process}.gtf")
 
     script:
-        args = ""
-        if(opts.args && opts.args != '') {
-            ext_args = opts.args
-            args += ext_args.trim()
-        }
-
-        filter_gtf_command = "cellranger mkgtf ${gtf} ${opts.outfile} ${args}"
+        
+        mkgtf_command = "cellranger mkgtf ${gtf} ${task.process}.gtf ${options.args}"
         
         // Log
         if (params.verbose){
-            println ("[MODULE] filter gtf command: " + filter_gtf_command)
+            println ("[MODULE] filter gtf command: " + mkgtf_command)
         }
 
        //SHELL
         """
-        ${filter_gtf_command}
+        ${mkgtf_command}
         """
-
-   
 }
 
 process cellranger_mkref {
 
-    publishDir "${params.outdir}/${opts.publish_dir}",
-    mode: "copy",
-    overwrite: true,
-    saveAs: { filename ->
-                    if (opts.publish_results == "none") null
-                    else filename }
-
+    label 'process_high'
+    publishDir "${params.outdir}",
+        mode: 'copy',
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process)) }
 
     container "streitlab/custom-nf-modules-cellranger:latest"
 
     input:
-        val(opts)
         path(filt_genome)
         path(fasta)
 
@@ -119,5 +101,4 @@ process cellranger_mkref {
         """
         ${mkref_command}
         """
-
 }
