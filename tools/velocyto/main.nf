@@ -2,55 +2,23 @@
 
 nextflow.enable.dsl=2
 
+include { initOptions; saveFiles; getSoftwareName } from './functions'
 
-process velocyto_run{
-    publishDir "${params.outdir}/${opts.publish_dir}",
-        mode: "copy", 
-        overwrite: true,
-        saveAs: { filename ->
-                      if (opts.publish_results == "none") null
-                      else filename }
-    
-    container "quay.io/biocontainers/velocyto.py:0.17.17--py37h97743b1_2"
-
-    input:
-        val opts
-        tuple val(meta), path(bam), path(barcodes)
-        path gtf
-
-    output:
-        // tuple val(meta), path("cellrangerOut_${meta.sample_name}/velocyto/cellrangerOut_${meta.sample_name}.loom"), emit: velocyto_counts
-
-    script:
-        args = ""
-        if(opts.args && opts.args != '') {
-            ext_args = opts.args
-            args += ext_args.trim()
-        }
-
-        velocyto_command = "velocyto run ${args} -b ${barcodes} -e ${meta.sample_name} -o velocyto_${meta.sample_name} ${bam} ${gtf}"
-        if (params.verbose){
-            println ("[MODULE] velocyto/run command: " + velocyto_command)
-        }
-
-        """
-        ${velocyto_command}
-        """
-}
-
+params.options = [:]
+def options    = initOptions(params.options)
 
 process velocyto_run_10x {
-    publishDir "${params.outdir}/${opts.publish_dir}",
-        mode: "copy", 
-        overwrite: true,
-        saveAs: { filename ->
-                      if (opts.publish_results == "none") null
-                      else filename }
+
+    label "low_cores"
+    label "high_mem"
+
+    publishDir "${params.outdir}",
+        mode: 'copy',
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
     
     container "quay.io/biocontainers/velocyto.py:0.17.17--py37h97743b1_2"
 
     input:
-        val opts
         tuple val(meta), path(reads)
         path gtf
 
@@ -58,13 +26,9 @@ process velocyto_run_10x {
         tuple val(meta), path("cellrangerOut_${meta.sample_name}/velocyto/cellrangerOut_${meta.sample_name}.loom"), emit: velocyto_counts
 
     script:
-        args = ""
-        if(opts.args && opts.args != '') {
-            ext_args = opts.args
-            args += ext_args.trim()
-        }
 
-        velocyto_command = "velocyto run10x ${args} ${reads} ${gtf}"
+        velocyto_command = "velocyto run10x ${options.args} ${reads} ${gtf}"
+
         if (params.verbose){
             println ("[MODULE] velocyto/run_10x command: " + velocyto_command)
         }
@@ -75,24 +39,25 @@ process velocyto_run_10x {
 }
 
 process velocyto_samtools {
-    publishDir "${params.outdir}/${opts.publish_dir}",
-        mode: "copy", 
-        overwrite: true,
-        saveAs: { filename ->
-                      if (opts.publish_results == "none") null
-                      else filename }
+
+    label "high_cores"
+    label "med_mem"
+
+    publishDir "${params.outdir}",
+        mode: 'copy',
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
     
     container "quay.io/biocontainers/samtools:1.10--h2e538c0_3"
 
     input:
-        val opts
         tuple val(meta), path(reads)
 
     output:
         tuple val(meta), path(reads), emit: sorted_cellranger_out
 
     script:
-        velocyto_samtools_command = "samtools sort -t CB -O BAM -o cellsorted_possorted_genome_bam.bam possorted_genome_bam.bam"
+        velocyto_samtools_command = "samtools sort -t CB -O BAM -@ ${task.cpus} -o cellsorted_possorted_genome_bam.bam possorted_genome_bam.bam"
+
         if (params.verbose){
             println ("[MODULE] velocyto/samtools command: " + velocyto_samtools_command)
         }
