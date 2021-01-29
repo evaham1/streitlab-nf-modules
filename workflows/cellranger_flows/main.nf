@@ -3,14 +3,14 @@
 // Specify DSL2
 nextflow.enable.dsl=2
 
-params.cellranger_mkgtf    = [:]
-params.cellranger_mkref     = [:]
-params.cellranger_count    = [:]
+params.cellranger_mkgtf_options    = [:]
+params.cellranger_mkref_options    = [:]
+params.cellranger_count_options    = [:]
 
 include {tenx_fastq_metadata} from "../../luslab-nf-modules/tools/metadata/main.nf" 
-include {cellranger_mkgtf} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_mkgtf)
-include {cellranger_mkref} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_mkref)
-include {cellranger_count} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_count)
+include {cellranger_mkgtf} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_mkgtf_options)
+include {cellranger_mkref} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_mkref_options)
+include {cellranger_count} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_count_options)
 
 // Define workflow to subset and index a genome region fasta file
 workflow scRNAseq_alignment_cellranger {

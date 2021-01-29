@@ -3,12 +3,12 @@
 // Specify DSL2
 nextflow.enable.dsl=2
 
-params.velocyto_samtools    = [:]
-params.velocyto_run_10x     = [:]
+params.velocyto_samtools_options    = [:]
+params.velocyto_run_10x_options     = [:]
 
 include {tenx_fastq_metadata} from "../../luslab-nf-modules/tools/metadata/main.nf" 
-include {velocyto_samtools} from "../../tools/velocyto/main.nf" addParams(options: params.velocyto_samtools)
-include {velocyto_run_10x} from "../../tools/velocyto/main.nf" addParams(options: params.velocyto_run_10x)
+include {velocyto_samtools} from "../../tools/velocyto/main.nf" addParams(options: params.velocyto_samtools_options)
+include {velocyto_run_10x} from "../../tools/velocyto/main.nf" addParams(options: params.velocyto_run_10x_options)
 
 // Define workflow to subset and index a genome region fasta file
 workflow velocyto_cellranger {
