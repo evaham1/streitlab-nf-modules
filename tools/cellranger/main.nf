@@ -22,11 +22,13 @@ process cellranger_count {
         path reference_genome
 
     output:
-        tuple val(meta), path("${meta.sample_name}_filtered_feature_bc_matrix"), emit: read_counts
-        tuple val(meta), path("cellrangerOut_${meta.sample_name}"), emit: cellranger_out
+        tuple val(meta), path("${prefix}"), emit: cellranger_out
+        tuple val(meta), path("*.gz"), emit: read_counts
 
     script:
-        cellranger_count_command = "cellranger count --id='cellrangerOut_${meta.sample_name}' --fastqs='./' --sample=${meta.sample_id} --transcriptome=${reference_genome} ${options.args}"
+        prefix = meta.run ? "${meta.sample_name}_${meta.run}" : "${meta.sample_name}"
+
+        cellranger_count_command = "cellranger count --id='${prefix}' --fastqs='./' --sample=${meta.sample_id} --transcriptome=${reference_genome} ${options.args}"
         
         // Log
         if (params.verbose){
@@ -36,8 +38,9 @@ process cellranger_count {
        //SHELL
         """
         ${cellranger_count_command}
-        mkdir ${meta.sample_name}_filtered_feature_bc_matrix
-        cp cellrangerOut_${meta.sample_name}/outs/filtered_feature_bc_matrix/*.gz ${meta.sample_name}_filtered_feature_bc_matrix
+        cd ${prefix}/outs/filtered_feature_bc_matrix/
+        for f in * ; do mv "\$f" ${prefix}_"\$f" ; done
+        cp * ../../../
         """
 }
 
