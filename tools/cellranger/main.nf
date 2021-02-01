@@ -47,7 +47,7 @@ process cellranger_count {
 
 process cellranger_mkgtf {
 
-    label 'process_med'
+    label 'process_low'
     publishDir "${params.outdir}",
         mode: 'copy',
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
@@ -77,7 +77,7 @@ process cellranger_mkgtf {
 
 process cellranger_mkref {
 
-    label 'process_high'
+    label 'process_medium'
     publishDir "${params.outdir}",
         mode: 'copy',
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
