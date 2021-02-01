@@ -55,11 +55,11 @@ process cellranger_mkgtf {
         path(gtf)
 
     output:
-        path("${task.process}.gtf")
+        path("*.gtf")
 
     script:
         
-        mkgtf_command = "cellranger mkgtf ${gtf} ${task.process}.gtf ${options.args}"
+        mkgtf_command = "cellranger mkgtf ${gtf} ${gtf.baseName}_mkgtf.gtf ${options.args}"
         
         // Log
         if (params.verbose){
