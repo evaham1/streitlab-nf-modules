@@ -85,14 +85,14 @@ process cellranger_mkref {
     container "streitlab/custom-nf-modules-cellranger:latest"
 
     input:
-        path(filt_genome)
+        path(gtf)
         path(fasta)
 
     output:
         path("reference_genome")
 
     script:
-        mkref_command = "cellranger mkref --genome=reference_genome --genes=${filt_genome} --fasta=${fasta} --nthreads=${task.cpus}"
+        mkref_command = "cellranger mkref --genome=reference_genome --genes=${gtf} --fasta=${fasta} --nthreads=${task.cpus}"
         
         // Log
         if (params.verbose){
