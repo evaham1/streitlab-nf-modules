@@ -23,12 +23,12 @@ process cellranger_count {
 
     output:
         tuple val(meta), path("${prefix}"), emit: cellranger_out
-        tuple val(meta), path("*{tsv,mtx}*"), emit: read_counts
+        tuple val(meta), path("${prefix}_filtered_feature_bc_matrix/*"), emit: read_counts
 
     script:
         prefix = meta.run ? "${meta.sample_name}_${meta.run}" : "${meta.sample_name}"
 
-        cellranger_count_command = "cellranger count --id='${prefix}' --fastqs='./' --sample=${meta.sample_id} --transcriptome=${reference_genome} ${options.args}"
+        cellranger_count_command = "cellranger count --id='${prefix}_cellranger' --fastqs='./' --sample=${meta.sample_id} --transcriptome=${reference_genome} ${options.args}"
         
         // Log
         if (params.verbose){
@@ -38,8 +38,8 @@ process cellranger_count {
        //SHELL
         """
         ${cellranger_count_command}
-        cp ${prefix}/outs/filtered_feature_bc_matrix/* ./
-        for f in *{tsv,mtx}* ; do mv "\$f" ${prefix}_"\$f" ; done
+        mkdir ${prefix}
+        cp ${prefix}_cellranger/outs/filtered_feature_bc_matrix/* ${prefix}
         """
 }
 

@@ -58,8 +58,6 @@ process velocyto_samtools {
         tuple val(meta), path(reads), emit: sorted_cellranger_out
 
     script:
-        prefix = meta.run ? "${meta.sample_name}_${meta.run}" : "${meta.sample_name}"
-
         velocyto_samtools_command = "samtools sort -t CB -O BAM -@ ${task.cpus} -o cellsorted_possorted_genome_bam.bam possorted_genome_bam.bam"
 
         if (params.verbose){
@@ -67,7 +65,7 @@ process velocyto_samtools {
         }
 
         """
-        cd ${prefix}/outs/
+        cd ${reads}/outs/
         ${velocyto_samtools_command}
         """
 }
