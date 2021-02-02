@@ -38,9 +38,8 @@ process cellranger_count {
        //SHELL
         """
         ${cellranger_count_command}
-        cd ${prefix}/outs/filtered_feature_bc_matrix/
+        cp ${prefix}/outs/filtered_feature_bc_matrix/* ./
         for f in * ; do mv "\$f" ${prefix}_"\$f" ; done
-        cp * ../../../
         """
 }
 
