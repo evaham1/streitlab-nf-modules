@@ -22,8 +22,8 @@ process cellranger_count {
         path reference_genome
 
     output:
-        tuple val(meta), path("${prefix}"), emit: cellranger_out
-        tuple val(meta), path("${prefix}_filtered_feature_bc_matrix/*"), emit: read_counts
+        tuple val(meta), path("${prefix}_cellranger"), emit: cellranger_out
+        tuple val(meta), path("${prefix}/*"), emit: read_counts
 
     script:
         prefix = meta.run ? "${meta.sample_name}_${meta.run}" : "${meta.sample_name}"
