@@ -11,7 +11,8 @@ include { scRNAseq_alignment } from '../main.nf' addParams(  gtf_tag_chroms_opti
                                                                                 cellranger_mkref_options: modules['cellranger_mkref'],
                                                                                 cellranger_count_options: modules['cellranger_count'],
                                                                                 velocyto_samtools_options: modules['velocyto_samtools'],
-                                                                                velocyto_run_10x_options: modules['velocyto_run_10x'] )
+                                                                                // velocyto_run_10x_options: modules['velocyto_run_10x'],
+                                                                                velocyto_run_options: modules['velocyto_run'] )
 
 Channel
     .value(file(params.fasta, checkIfExists: true))

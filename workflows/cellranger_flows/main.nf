@@ -20,7 +20,6 @@ workflow scRNAseq_alignment_cellranger {
         sample_csv
 
     main:
-
         // Enumerate samples from sample csv
         tenx_fastq_metadata(sample_csv)
 
