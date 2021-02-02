@@ -1,2 +1,3 @@
 sample_id,data1,data2,sample_name,run
 THI725A2,./test_data/cellranger/fastqs/seq1/THI725A2,./test_data/cellranger/fastqs/seq2/THI725A2,hh6,1
+THI725A2,./test_data/cellranger/fastqs/seq1/THI725A2,./test_data/cellranger/fastqs/seq2/THI725A2,hh7,2

@@ -23,7 +23,7 @@ process cellranger_count {
 
     output:
         tuple val(meta), path("${prefix}"), emit: cellranger_out
-        tuple val(meta), path("*.gz"), emit: read_counts
+        tuple val(meta), path("*{tsv,mtx}*"), emit: read_counts
 
     script:
         prefix = meta.run ? "${meta.sample_name}_${meta.run}" : "${meta.sample_name}"
@@ -39,7 +39,7 @@ process cellranger_count {
         """
         ${cellranger_count_command}
         cp ${prefix}/outs/filtered_feature_bc_matrix/* ./
-        for f in * ; do mv "\$f" ${prefix}_"\$f" ; done
+        for f in *{tsv,mtx}* ; do mv "\$f" ${prefix}_"\$f" ; done
         """
 }
 
