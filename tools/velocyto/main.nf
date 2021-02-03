@@ -36,7 +36,7 @@ process velocyto_run_10x {
 
         """
         ${velocyto_command}
-        mv ${reads}/velocyto/${prefix}.loom ./
+        mv ${reads}/velocyto/${reads}.loom ./${prefix}.loom
         """
 }
 
