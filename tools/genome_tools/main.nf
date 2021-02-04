@@ -8,8 +8,7 @@ def options    = initOptions(params.options)
 
 process gtf_tag_chroms {
     
-    label 'low_cores'
-    label 'min_mem'
+    label 'process_low'
 
     publishDir "${params.outdir}",
         mode: 'copy',

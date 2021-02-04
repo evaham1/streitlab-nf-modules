@@ -10,8 +10,7 @@ def options    = initOptions(params.options)
 
 process cellranger_count {
 
-    label 'max_cores'
-    label 'max_mem'
+    label 'process_high'
 
     publishDir "${params.outdir}",
         mode: 'copy',
@@ -48,8 +47,7 @@ process cellranger_count {
 
 process cellranger_mkgtf {
 
-    label 'low_cores'
-    label 'min_mem'
+    label 'process_low'
 
     publishDir "${params.outdir}",
         mode: 'copy',
@@ -80,8 +78,7 @@ process cellranger_mkgtf {
 
 process cellranger_mkref {
 
-    label 'avg_cores'
-    label 'avg_mem'
+    label 'process_medium'
 
     publishDir "${params.outdir}",
         mode: 'copy',
