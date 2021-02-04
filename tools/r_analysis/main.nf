@@ -2,18 +2,20 @@
 
 nextflow.enable.dsl=2
 
+include { initOptions; saveFiles; getSoftwareName } from './functions'
+
+params.options = [:]
+def options    = initOptions(params.options)
+
 process r_analysis {
-    publishDir "${params.outdir}/${opts.publish_dir}",
-    mode: "copy",
-    overwrite: true,
-    saveAs: { filename ->
-                    if (opts.publish_results == "none") null
-                    else filename }
+
+    publishDir "${params.outdir}",
+        mode: 'copy',
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
 
     container "rocker/tidyverse:3.6.3"
 
     input:
-        val opts
         path 'input/*'
 
     output:
@@ -21,14 +23,8 @@ process r_analysis {
 
     script:
 
-    args = ""
-        if(opts.args && opts.args != '') {
-            ext_args = opts.args
-            args += ext_args.trim()
-        }
-
-    """
-    Rscript ${opts.script} --cores ${task.cpus} --runtype nextflow ${args}
-    rm -r input
-    """
+        """
+        Rscript ${options.script} --cores ${task.cpus} --runtype nextflow ${options.args}
+        rm -r input
+        """
 }
