@@ -13,7 +13,7 @@ process r_analysis {
         mode: 'copy',
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
 
-    container "rocker/tidyverse:3.6.3"
+    container "streitlab/custom-nf-modules-r_analysis:latest"
 
     input:
         path 'input/*'
