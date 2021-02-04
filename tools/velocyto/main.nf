@@ -9,8 +9,8 @@ def options    = initOptions(params.options)
 
 process velocyto_run_10x {
 
-    label "min_cores"
-    label "max_mem"
+    label "avg_cores"
+    label "avg_mem"
 
     publishDir "${params.outdir}",
         mode: 'copy',
@@ -42,7 +42,7 @@ process velocyto_run_10x {
 
 process velocyto_samtools {
 
-    label "high_cores"
+    label "avg_cores"
     label "avg_mem"
 
     publishDir "${params.outdir}",

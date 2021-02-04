@@ -10,7 +10,9 @@ def options    = initOptions(params.options)
 
 process cellranger_count {
 
-    label 'process_high'
+    label 'max_cores'
+    label 'max_mem'
+
     publishDir "${params.outdir}",
         mode: 'copy',
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
@@ -46,7 +48,9 @@ process cellranger_count {
 
 process cellranger_mkgtf {
 
-    label 'process_low'
+    label 'low_cores'
+    label 'min_mem'
+
     publishDir "${params.outdir}",
         mode: 'copy',
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
@@ -76,7 +80,9 @@ process cellranger_mkgtf {
 
 process cellranger_mkref {
 
-    label 'process_medium'
+    label 'avg_cores'
+    label 'avg_mem'
+
     publishDir "${params.outdir}",
         mode: 'copy',
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }

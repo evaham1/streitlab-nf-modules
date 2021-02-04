@@ -8,7 +8,9 @@ def options    = initOptions(params.options)
 
 process gtf_tag_chroms {
     
-    label 'process_low'
+    label 'low_cores'
+    label 'min_mem'
+
     publishDir "${params.outdir}",
         mode: 'copy',
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
