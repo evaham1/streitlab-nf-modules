@@ -1,13 +1,10 @@
 #!/usr/bin/env nextflow
 
-// Specify DSL2
-nextflow.enable.dsl=2
-
 params.cellranger_mkgtf_options    = [:]
 params.cellranger_mkref_options    = [:]
 params.cellranger_count_options    = [:]
 
-include {tenx_fastq_metadata} from "../../luslab-nf-modules/tools/metadata/main.nf" 
+include {tenx_metadata} from "../../tools/metadata/main.nf"
 include {cellranger_mkgtf} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_mkgtf_options)
 include {cellranger_mkref} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_mkref_options)
 include {cellranger_count} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_count_options)
@@ -17,12 +14,12 @@ workflow scRNAseq_alignment_cellranger {
     take:
         fasta
         gtf
-        sample_csv
+        samplesheet
 
     main:
 
-        // Enumerate samples from sample csv
-        tenx_fastq_metadata(sample_csv)
+        // Set sample channel from samplesheet input
+        tenx_metadata( samplesheet )
 
         // Filter GTF based on gene biotypes passed in params.modules
         cellranger_mkgtf( gtf )
@@ -31,7 +28,7 @@ workflow scRNAseq_alignment_cellranger {
         cellranger_mkref( cellranger_mkgtf.out, fasta )
 
         // Obtain read counts
-        cellranger_count( tenx_fastq_metadata.out, cellranger_mkref.out.collect() )
+        cellranger_count( tenx_metadata.out.metadata, cellranger_mkref.out.collect() )
 
     emit:
         read_counts = cellranger_count.out.read_counts

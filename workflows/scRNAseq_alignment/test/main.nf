@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 
-nextflow.enable.dsl=2
+nextflow.enable.dsl = 2
 
 // Don't overwrite global params.modules, create a copy instead and use that within the main script.
 def modules = params.modules.clone()
@@ -20,7 +20,6 @@ Channel
 Channel
     .value(file(params.gtf, checkIfExists: true))
     .set {ch_gtf}
-
 
 workflow {
     scRNAseq_alignment( ch_fasta, ch_gtf, params.samplesheet )
