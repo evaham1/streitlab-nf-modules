@@ -7,19 +7,19 @@ include { initOptions; saveFiles; getSoftwareName } from './functions'
 params.options = [:]
 def options    = initOptions(params.options)
 
-process r_analysis {
+process r {
 
     publishDir "${params.outdir}",
         mode: 'copy',
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), publish_id:'') }
 
-    container "streitlab/custom-nf-modules-r_analysis:latest"
+    container "streitlab/custom-nf-modules-r:latest"
 
     input:
         tuple val(meta), path('input/*')
 
     output:
-        file '*'
+        tuple val(meta), file('*')
 
     script:
 
