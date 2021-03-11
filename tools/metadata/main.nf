@@ -7,32 +7,19 @@ import groovy.transform.Synchronized
 nextflow.enable.dsl=2
 
 
-workflow metadata_enumerate_files {
+workflow metadata {
     take: file_path
     main:
         Channel
             .fromPath( file_path )
             .splitCsv(header:true)
-            .map { row -> ProcessRowFiles(row) }
+            .map { row -> ProcessRow(row) }
             .set { metadata }
     emit:
         metadata
 }
 
-workflow metadata_enumerate_dir {
-    take: file_path
-    main:
-        Channel
-            .fromPath( file_path )
-            .splitCsv(header:true)
-            .map { row -> ProcessRowDir(row) }
-            .set { metadata }
-    emit:
-        metadata
-}
-
-
-def ProcessRowFiles(LinkedHashMap row, boolean flattenData = false) {
+def ProcessRow(LinkedHashMap row, boolean flattenData = false) {
     def meta = [:]
     meta.sample_id = row.sample_id
 
@@ -46,26 +33,16 @@ def ProcessRowFiles(LinkedHashMap row, boolean flattenData = false) {
     }
 
     def array = []
-    array = [ meta, file(row.data, checkIfExists: true) ] //read in list of files into an array
 
-    return array
-}
+    data = file(row.data, checkIfExists: true)
 
-def ProcessRowDir(LinkedHashMap row, boolean flattenData = false) {
-    def meta = [:]
-    meta.sample_id = row.sample_id
-
-    for (Map.Entry<String, ArrayList<String>> entry : row.entrySet()) {
-        String key = entry.getKey();
-        String value = entry.getValue();
-    
-        if(key != "sample_id" && key != "data") {
-            meta.put(key, value)
-        }
+    if (data instanceof List) {
+        array = [ meta, data ] // read files from glob list
+    } else if (data instanceof Path){
+        array = [ meta, [ data ] ] //read path
+    } else {
+        throw new Exception("data class not recognised")
     }
-
-    def array = []
-    array = [ meta, [ row.data ] ] //read entire dir into an array
 
     return array
 }

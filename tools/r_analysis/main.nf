@@ -16,7 +16,7 @@ process r_analysis {
     container "streitlab/custom-nf-modules-r_analysis:latest"
 
     input:
-        path 'input/*'
+        tuple val(meta), path('input/*')
 
     output:
         file '*'
@@ -25,6 +25,6 @@ process r_analysis {
 
         """
         Rscript ${options.script} --cores ${task.cpus} --runtype nextflow ${options.args}
-        rm -r input
+
         """
 }
