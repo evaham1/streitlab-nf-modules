@@ -1,5 +1,3 @@
-library(Antler)
-
 dir.create('csv')
 dir.create('rds')
 
