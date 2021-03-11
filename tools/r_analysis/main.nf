@@ -25,6 +25,6 @@ process r_analysis {
 
         """
         Rscript ${params.script} --cores ${task.cpus} --runtype nextflow ${options.args}
-
+        rm -r input
         """
 }
