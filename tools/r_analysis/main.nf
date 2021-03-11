@@ -24,7 +24,7 @@ process r_analysis {
     script:
 
         """
-        Rscript ${options.script} --cores ${task.cpus} --runtype nextflow ${options.args}
+        Rscript ${params.script} --cores ${task.cpus} --runtype nextflow ${options.args}
 
         """
 }
