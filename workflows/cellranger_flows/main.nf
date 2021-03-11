@@ -4,7 +4,7 @@ params.cellranger_mkgtf_options    = [:]
 params.cellranger_mkref_options    = [:]
 params.cellranger_count_options    = [:]
 
-include {tenx_metadata} from "../../tools/metadata/main.nf"
+include {metadata_enumerate_files} from "../../tools/metadata/main.nf"
 include {cellranger_mkgtf} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_mkgtf_options)
 include {cellranger_mkref} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_mkref_options)
 include {cellranger_count} from "../../tools/cellranger/main.nf" addParams(options: params.cellranger_count_options)
@@ -19,7 +19,7 @@ workflow scRNAseq_alignment_cellranger {
     main:
 
         // Set sample channel from samplesheet input
-        tenx_metadata( samplesheet )
+        metadata_enumerate_files( samplesheet )
 
         // Filter GTF based on gene biotypes passed in params.modules
         cellranger_mkgtf( gtf )
@@ -28,7 +28,7 @@ workflow scRNAseq_alignment_cellranger {
         cellranger_mkref( cellranger_mkgtf.out, fasta )
 
         // Obtain read counts
-        cellranger_count( tenx_metadata.out.metadata, cellranger_mkref.out.collect() )
+        cellranger_count( metadata_enumerate_files.out.metadata, cellranger_mkref.out.collect() )
 
     emit:
         read_counts = cellranger_count.out.read_counts
