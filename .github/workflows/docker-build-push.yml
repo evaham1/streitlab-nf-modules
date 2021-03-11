@@ -12,7 +12,7 @@ jobs:
       matrix:
         tag: ["base"]
         docker-file: ["Dockerfile"]
-        module-name: ["r_analysis"]
+        module-name: ["r"]
     steps:
       - uses: actions/checkout@v2
       - name: Set version and tags
