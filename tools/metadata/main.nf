@@ -34,7 +34,7 @@ def ProcessRow(LinkedHashMap row, boolean flattenData = false) {
 
     def array = []
 
-    data = file(row.data, checkIfExists: true)
+    data = file(new File(row.data).getAbsolutePath(), checkIfExists: true)
 
     if (data instanceof List) {
         array = [ meta, data ] // read files from glob list
