@@ -3,7 +3,7 @@ name: docker-build-push
 
 on:
   push:
-    branches: [master]
+    branches: [eva-practice]
 
 jobs:
   build-push-docker:
@@ -12,7 +12,7 @@ jobs:
       matrix:
         tag: ["base"]
         docker-file: ["Dockerfile"]
-        module-name: ["r"]
+        module-name: ["r", "eva-practice"]
     steps:
       - uses: actions/checkout@v2
       - name: Set version and tags
